@@ -1,42 +1,59 @@
-# sv
+# yugioh-grid
 
-Everything you need to build a Svelte project, powered by [`sv`](https://github.com/sveltejs/cli).
+遊戯王カードデータを高速グリッド表示するSPA。
 
-## Creating a project
+## 構成
 
-If you're seeing this, you've probably already done this step. Congrats!
+| 要素 | 内容 |
+|---|---|
+| フレームワーク | SvelteKit + Svelte 5 |
+| グリッド | [@svar-ui/svelte-grid](https://svar.dev/svelte/datagrid/) (Willow テーマ) |
+| データ取得 | DuckDB (Node API) でリモート Parquet を in-memory クエリ |
+| データソース | [prs-watch/yugioh-ja-dataset](https://github.com/prs-watch/yugioh-ja-dataset) releases |
 
-```sh
-# create a new project
-npx sv create my-app
+## データフロー
+
+```
++page.server.ts (SSR)
+  └─ DuckDB :memory: で dataset.parquet を read_parquet()
+  └─ name_ja が空のレコードを除外して全件返却
+      ↓
++page.svelte (client)
+  └─ SVAR Grid にバインド（仮想スクロールで全件高速表示）
 ```
 
-To recreate this project with the same configuration:
+## グリッドのカラム構成
+
+| カラム | フィルター | ソート |
+|---|---|---|
+| ID | — | — |
+| カード名 | テキスト検索 | — |
+| カード種 | リッチセレクト | ✓ |
+| 種族 / カード種詳細 | リッチセレクト | ✓ |
+| 属性 | リッチセレクト | ✓ |
+| レベル | — | ✓ |
+| スケール | — | ✓ |
+| リンク | — | ✓ |
+| 攻 | — | ✓ |
+| 守 | — | ✓ |
+| テキスト | テキスト検索 | — |
+
+## 開発
 
 ```sh
-# recreate this project
-npx sv@0.15.3 create --template minimal --types ts --add prettier eslint --install npm .
-```
-
-## Developing
-
-Once you've created a project and installed dependencies with `npm install` (or `pnpm install` or `yarn`), start a development server:
-
-```sh
+npm install
 npm run dev
-
-# or start the server and open the app in a new browser tab
-npm run dev -- --open
 ```
 
-## Building
-
-To create a production version of your app:
+## ビルド
 
 ```sh
 npm run build
+npm run preview
 ```
 
-You can preview the production build with `npm run preview`.
+## 型チェック
 
-> To deploy your app, you may need to install an [adapter](https://svelte.dev/docs/kit/adapters) for your target environment.
+```sh
+npm run check
+```
