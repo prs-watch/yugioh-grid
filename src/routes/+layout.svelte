@@ -5,7 +5,7 @@
 </script>
 
 <svelte:head>
-	<title>Yu-Gi-Oh! Card Grid</title>
+	<title>yugioh-grid</title>
 	<link rel="icon" href={favicon} />
 </svelte:head>
 
