@@ -1,87 +1,34 @@
 <script lang="ts">
-	import { onMount } from 'svelte';
-	import Papa from 'papaparse';
 	import { Grid, Willow } from '@svar-ui/svelte-grid';
 	import type { IColumnConfig } from '@svar-ui/svelte-grid';
+	import type { PageData } from './$types';
 
-	interface Card {
-		id: number;
-		name_en: string;
-		text_en: string;
-		name_ja: string;
-		ruby: string;
-		text_ja: string;
-		type: string;
-		frame_type: string;
-		atk: number | null;
-		def: number | null;
-		level: number | null;
-		race: string;
-		attribute: string;
-		scale: number | null;
-		linkval: number | null;
-		linkmarkers: string;
-	}
+	let { data }: { data: PageData } = $props();
 
-	function toInt(v: string): number | null {
-		const n = parseInt(v, 10);
-		return isNaN(n) ? null : n;
-	}
-
-	let data = $state<Card[]>([]);
-	let loading = $state(true);
-	let error = $state('');
-
-	const columns: IColumnConfig[] = [
+	const columns = [
 		{ id: 'id', header: 'ID', width: 90 },
-		{ id: 'name_ja', header: [{ text: 'カード名' }, { filter: 'text' }], width: 300 },
-		{ id: 'frame_type', header: ['カード種', { filter: 'richselect' }], width: 200, sort: true },
+		{ id: 'name_ja', header: [{ text: 'カード名' }, { filter: 'text' as const }], width: 300 },
 		{
-			id: 'race',
-			header: ['種族 / カード種詳細', { filter: 'richselect' }],
+			id: 'frame_type',
+			header: ['カード種', { filter: 'richselect' as const }],
 			width: 200,
 			sort: true
 		},
-		{ id: 'attribute', header: ['属性', { filter: 'richselect' }], width: 80, sort: true },
+		{
+			id: 'race',
+			header: ['種族 / カード種詳細', { filter: 'richselect' as const }],
+			width: 200,
+			sort: true
+		},
+		{ id: 'attribute', header: ['属性', { filter: 'richselect' as const }], width: 80, sort: true },
 		{ id: 'level', header: 'レベル', width: 80, sort: true },
 		{ id: 'scale', header: 'スケール', width: 80, sort: true },
 		{ id: 'linkval', header: 'リンク', width: 80, sort: true },
 		{ id: 'atk', header: '攻', width: 80, sort: true },
 		{ id: 'def', header: '守', width: 80, sort: true },
-		{ id: 'text_ja', header: ['テキスト', { filter: 'text' }], flexgrow: 1 }
-	];
-
-	onMount(async () => {
-		try {
-			const res = await fetch('/dataset.csv');
-			const text = await res.text();
-			const result = Papa.parse<Record<string, string>>(text, {
-				header: true,
-				skipEmptyLines: true,
-				dynamicTyping: false
-			});
-			data = result.data
-				.filter((r) => r.name_ja !== '')
-				.map((r) => ({
-					...r,
-					id: toInt(r.id) ?? 0,
-					atk: toInt(r.atk),
-					def: toInt(r.def),
-					level: toInt(r.level),
-					scale: toInt(r.scale),
-					linkval: toInt(r.linkval)
-				})) as Card[];
-		} catch (e) {
-			error = String(e);
-		} finally {
-			loading = false;
-		}
-	});
+		{ id: 'text_ja', header: ['テキスト', { filter: 'text' as const }], flexgrow: 1 }
+	] satisfies IColumnConfig[];
 </script>
-
-<svelte:head>
-	<title>Yu-Gi-Oh! Card Grid</title>
-</svelte:head>
 
 <div class="app">
 	<header>
@@ -89,15 +36,9 @@
 	</header>
 
 	<main>
-		{#if loading}
-			<div class="status">Loading CSV…</div>
-		{:else if error}
-			<div class="status error">{error}</div>
-		{:else}
-			<Willow>
-				<Grid {data} {columns} />
-			</Willow>
-		{/if}
+		<Willow>
+			<Grid data={data.cards} {columns} />
+		</Willow>
 	</main>
 </div>
 
