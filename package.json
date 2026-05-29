@@ -34,8 +34,6 @@
 	},
 	"dependencies": {
 		"@duckdb/node-api": "^1.5.3-r.2",
-		"@svar-ui/svelte-grid": "^2.6.2",
-		"@types/papaparse": "^5.5.2",
-		"papaparse": "^5.5.3"
+		"@svar-ui/svelte-grid": "^2.6.2"
 	}
 }
