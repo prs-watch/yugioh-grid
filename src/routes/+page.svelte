@@ -87,17 +87,4 @@
 		flex: 1;
 		min-height: 0;
 	}
-
-	.status {
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		flex: 1;
-		font-size: 1rem;
-		color: #94a3b8;
-	}
-
-	.error {
-		color: #f87171;
-	}
 </style>
