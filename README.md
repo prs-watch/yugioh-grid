@@ -2,6 +2,8 @@
 
 遊戯王カードデータを高速グリッド表示するSPA。
 
+**https://yugioh-grid.vercel.app/**
+
 ## 構成
 
 | 要素 | 内容 |
