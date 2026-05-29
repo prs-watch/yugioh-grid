@@ -32,7 +32,7 @@
 
 <div class="app">
 	<header>
-		<h1>Yu-Gi-Oh! Card Grid</h1>
+		<h1>yugioh-grid</h1>
 	</header>
 
 	<main>
