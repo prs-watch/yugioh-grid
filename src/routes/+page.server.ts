@@ -7,6 +7,7 @@ export const load = async () => {
 	const instance = await DuckDBInstance.create(':memory:');
 	const conn = await instance.connect();
 
+	await conn.run('INSTALL httpfs; LOAD httpfs;');
 	const result = await conn.run(`
 		SELECT
 			id,
