@@ -14,7 +14,7 @@ export const GET = async () => {
 					alignItems: 'center',
 					justifyContent: 'center',
 					gap: '0px',
-					padding: '80px',
+					padding: '80px'
 				},
 				children: [
 					{
@@ -26,10 +26,10 @@ export const GET = async () => {
 								color: '#f8fafc',
 								letterSpacing: '-3px',
 								lineHeight: '1.1',
-								textAlign: 'center',
+								textAlign: 'center'
 							},
-							children: 'Yu-Gi-Oh! Card Grid',
-						},
+							children: 'yugioh-grid'
+						}
 					},
 					{
 						type: 'div',
@@ -38,26 +38,13 @@ export const GET = async () => {
 								fontSize: '34px',
 								color: '#94a3b8',
 								marginTop: '28px',
-								textAlign: 'center',
+								textAlign: 'center'
 							},
-							children: 'Search  ·  Filter  ·  Sort  —  23,000+ cards',
-						},
-					},
-					{
-						type: 'div',
-						props: {
-							style: {
-								position: 'absolute',
-								bottom: '44px',
-								right: '64px',
-								fontSize: '22px',
-								color: '#475569',
-							},
-							children: 'yugioh-grid.vercel.app',
-						},
-					},
-				],
-			},
+							children: 'Search / Filter / Sort'
+						}
+					}
+				]
+			}
 		} as never,
 		{ width: 1200, height: 630 }
 	);
