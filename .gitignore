@@ -25,6 +25,8 @@ vite.config.ts.timestamp-*
 
 # claude
 .claude
+.agents
+skills-lock.json
 memory
 
 # vscode
