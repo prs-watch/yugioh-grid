@@ -2,7 +2,9 @@ import { ImageResponse } from '@vercel/og';
 
 export const config = { runtime: 'edge' };
 
-export const GET = () => {
+export const GET = async ({ url }: { url: URL }) => {
+	const fontData = await fetch(`${url.origin}/Geist-Regular.ttf`).then((r) => r.arrayBuffer());
+
 	return new ImageResponse(
 		{
 			type: 'div',
@@ -16,7 +18,8 @@ export const GET = () => {
 					alignItems: 'center',
 					justifyContent: 'center',
 					gap: '0px',
-					padding: '80px'
+					padding: '80px',
+					fontFamily: 'Geist'
 				},
 				children: [
 					{
@@ -24,7 +27,7 @@ export const GET = () => {
 						props: {
 							style: {
 								fontSize: '84px',
-								fontWeight: '700',
+								fontWeight: '400',
 								color: '#f8fafc',
 								letterSpacing: '-3px',
 								lineHeight: '1.1',
@@ -36,6 +39,10 @@ export const GET = () => {
 				]
 			}
 		} as never,
-		{ width: 1200, height: 630 }
+		{
+			width: 1200,
+			height: 630,
+			fonts: [{ name: 'Geist', data: fontData, style: 'normal' }]
+		}
 	);
 };
