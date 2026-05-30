@@ -51,6 +51,7 @@ const load = async () => {
       FROM read_parquet('${parquetPath}')
       WHERE name_ja IS NOT NULL
         AND name_ja <> ''
+      ORDER BY name_ja;
     `);
 
 		return await result.getRowObjectsJson();
