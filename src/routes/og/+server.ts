@@ -1,6 +1,6 @@
 import { ImageResponse } from '@vercel/og';
 
-export const config = { runtime: 'edge' };
+export const config = { runtime: 'nodejs' };
 
 export const GET = async ({ url }: { url: URL }) => {
 	const fontData = await fetch(`${url.origin}/Geist-Regular.ttf`).then((r) => r.arrayBuffer());
