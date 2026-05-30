@@ -1,10 +1,13 @@
 <script lang="ts">
+	import type { Json } from '@duckdb/node-api/lib/Json';
 	import { Grid, Willow } from '@svar-ui/svelte-grid';
 	import type { IColumnConfig } from '@svar-ui/svelte-grid';
-	import type { PageData } from './$types';
+	import { onMount } from 'svelte';
 
-	let { data }: { data: PageData } = $props();
+	/** マウント時に /api/cards から取得したカード行データ。 */
+	let cards = $state<Record<string, Json>[]>([]);
 
+	/** グリッドのカラム定義。フィルター・ソートコントロールをインラインで設定。 */
 	const columns = [
 		{ id: 'id', header: 'ID', width: 90 },
 		{ id: 'name_ja', header: [{ text: 'カード名' }, { filter: 'text' as const }], width: 300 },
@@ -28,6 +31,11 @@
 		{ id: 'def', header: '守', width: 80, sort: true },
 		{ id: 'text_ja', header: ['テキスト', { filter: 'text' as const }], flexgrow: 1 }
 	] satisfies IColumnConfig[];
+
+	onMount(async () => {
+		const res = await fetch('/api/cards');
+		cards = await res.json();
+	});
 </script>
 
 <div class="app">
@@ -37,7 +45,7 @@
 
 	<main>
 		<Willow>
-			<Grid data={data.cards} {columns} />
+			<Grid data={cards} {columns} />
 		</Willow>
 	</main>
 </div>

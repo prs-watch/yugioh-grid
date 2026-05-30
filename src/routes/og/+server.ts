@@ -1,7 +1,9 @@
 import { ImageResponse } from '@vercel/og';
 
+/** Edge ランタイムでは @vercel/og の vc-blob-asset バンドルエラーが発生するため Node.js を指定。 */
 export const config = { runtime: 'nodejs24.x' };
 
+/** SNS リンクプレビュー用の OGP 画像 (1200×630) を返す。 */
 export const GET = () => {
 	return new ImageResponse(
 		{
