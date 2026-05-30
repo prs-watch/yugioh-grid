@@ -1,6 +1,8 @@
 import { ImageResponse } from '@vercel/og';
 
-export const GET = async () => {
+export const config = { runtime: 'edge' };
+
+export const GET = () => {
 	return new ImageResponse(
 		{
 			type: 'div',
@@ -29,18 +31,6 @@ export const GET = async () => {
 								textAlign: 'center'
 							},
 							children: 'yugioh-grid'
-						}
-					},
-					{
-						type: 'div',
-						props: {
-							style: {
-								fontSize: '34px',
-								color: '#94a3b8',
-								marginTop: '28px',
-								textAlign: 'center'
-							},
-							children: 'Search / Filter / Sort'
 						}
 					}
 				]
