@@ -9,7 +9,6 @@
 
 	/** グリッドのカラム定義。フィルター・ソートコントロールをインラインで設定。 */
 	const columns = [
-		{ id: 'id', header: 'ID', width: 90 },
 		{ id: 'name_ja', header: [{ text: 'カード名' }, { filter: 'text' as const }], width: 300 },
 		{
 			id: 'frame_type',
@@ -24,9 +23,9 @@
 			sort: true
 		},
 		{ id: 'attribute', header: ['属性', { filter: 'richselect' as const }], width: 80, sort: true },
-		{ id: 'level', header: 'レベル', width: 80, sort: true },
-		{ id: 'scale', header: 'スケール', width: 80, sort: true },
-		{ id: 'linkval', header: 'リンク', width: 80, sort: true },
+		{ id: 'level', header: ['レベル', { filter: 'richselect' as const }], width: 80, sort: true },
+		{ id: 'scale', header: ['スケール', { filter: 'richselect' as const }], width: 80, sort: true },
+		{ id: 'linkval', header: ['リンク', { filter: 'richselect' as const }], width: 80, sort: true },
 		{ id: 'atk', header: '攻', width: 80, sort: true },
 		{ id: 'def', header: '守', width: 80, sort: true },
 		{ id: 'text_ja', header: ['テキスト', { filter: 'text' as const }], flexgrow: 1 }
