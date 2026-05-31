@@ -6,6 +6,7 @@
 	import FrameTypeBadge from '$lib/components/FrameTypeBadge.svelte';
 	import RaceBadge from '$lib/components/RaceBadge.svelte';
 	import LevelBadge from '$lib/components/LevelBadge.svelte';
+	import AttributeBadge from '$lib/components/AttributeBadge.svelte';
 
 	/** マウント時に /api/cards から取得したカード行データ。 */
 	let cards = $state<Record<string, Json>[]>([]);
@@ -28,7 +29,7 @@
 	const columns = $derived.by(
 		() =>
 			[
-				{ id: 'name_ja', header: [{ text: 'カード名' }, { filter: 'text' as const }], width: 300 },
+				{ id: 'name', header: [{ text: 'カード名' }, { filter: 'text' as const }], width: 300 },
 				{
 					id: 'frame_type',
 					header: ['カード種', { filter: 'richselect' as const }],
@@ -46,8 +47,9 @@
 				{
 					id: 'attribute',
 					header: ['属性', { filter: 'richselect' as const }],
-					width: 80,
-					sort: true
+					width: 95,
+					sort: true,
+					cell: AttributeBadge
 				},
 				{
 					id: 'level',
@@ -74,18 +76,18 @@
 				{ id: 'atk', header: '攻', width: 70, sort: true },
 				{ id: 'def', header: '守', width: 70, sort: true },
 				{
-					id: 'text_ja',
+					id: 'text',
 					header: ['テキスト', { filter: 'text' as const }],
 					flexgrow: 1,
 					// @ts-expect-error tooltip は IColumnConfig 型定義にないが Tooltip コンポーネントが参照する
-					tooltip: (row: Record<string, Json>) => String(row.text_ja ?? '')
+					tooltip: (row: Record<string, Json>) => String(row.text ?? '')
 				}
 			] satisfies IColumnConfig[]
 	);
 
 	/** モバイル向け簡略カラム定義。 */
 	const mobileColumns: IColumnConfig[] = [
-		{ id: 'name_ja', header: [{ text: 'カード名' }, { filter: 'text' as const }], flexgrow: 1 },
+		{ id: 'name', header: [{ text: 'カード名' }, { filter: 'text' as const }], flexgrow: 1 },
 		{ id: 'frame_type', header: 'カード種', width: 90, cell: FrameTypeBadge },
 		{ id: 'level', header: 'Lv', width: 75, cell: LevelBadge },
 		{ id: 'atk', header: '攻', width: 45, sort: true },
@@ -95,7 +97,7 @@
 	/** タブレット向けカラム定義。 */
 	const tabletColumns: IColumnConfig[] = [
 		{
-			id: 'name_ja',
+			id: 'name',
 			header: [{ text: 'カード名' }, { filter: 'text' as const }],
 			width: 220,
 			flexgrow: 1

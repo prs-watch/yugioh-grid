@@ -38,6 +38,8 @@ const load = async () => {
         name_ja,
         ruby,
         text_ja,
+        COALESCE(NULLIF(name_ja, ''), NULLIF(name_en, '')) AS name,
+        COALESCE(NULLIF(text_ja, ''), NULLIF(text_en, '')) AS text,
         type,
         frame_type,
         atk,
@@ -49,8 +51,6 @@ const load = async () => {
         linkval,
         linkmarkers
       FROM read_parquet('${parquetPath}')
-      WHERE name_ja IS NOT NULL
-        AND name_ja <> ''
       ORDER BY name_ja;
     `);
 
