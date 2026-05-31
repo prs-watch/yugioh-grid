@@ -14,17 +14,15 @@
 	let api = $state<IApi>();
 
 	/** 数値フィールドの一意値を昇順ソートして richselect 用オプションに変換する。 */
-	function numericOptions(field: string) {
+	const numericOptions = (field: string) => {
 		return [
 			...new Set(
-				cards
-					.map((c) => c[field])
-					.filter((v): v is number => typeof v === 'number' && v !== 0)
+				cards.map((c) => c[field]).filter((v): v is number => typeof v === 'number' && v !== 0)
 			)
 		]
 			.sort((a, b) => a - b)
 			.map((v) => ({ id: v, label: String(v) }));
-	}
+	};
 
 	/** グリッドのカラム定義。数値フィルター列は cards ロード後に options が確定するため $derived で管理。 */
 	const columns = $derived.by(
@@ -54,7 +52,7 @@
 				{
 					id: 'level',
 					header: ['レベル', { filter: 'richselect' as const }],
-					width: 180,
+					width: 120,
 					sort: true,
 					cell: LevelBadge,
 					options: numericOptions('level')
@@ -73,8 +71,8 @@
 					sort: true,
 					options: numericOptions('linkval')
 				},
-				{ id: 'atk', header: '攻', width: 80, sort: true },
-				{ id: 'def', header: '守', width: 80, sort: true },
+				{ id: 'atk', header: '攻', width: 70, sort: true },
+				{ id: 'def', header: '守', width: 70, sort: true },
 				{
 					id: 'text_ja',
 					header: ['テキスト', { filter: 'text' as const }],
@@ -84,6 +82,47 @@
 				}
 			] satisfies IColumnConfig[]
 	);
+
+	/** モバイル向け簡略カラム定義。 */
+	const mobileColumns: IColumnConfig[] = [
+		{ id: 'name_ja', header: [{ text: 'カード名' }, { filter: 'text' as const }], flexgrow: 1 },
+		{ id: 'frame_type', header: 'カード種', width: 90, cell: FrameTypeBadge },
+		{ id: 'level', header: 'Lv', width: 75, cell: LevelBadge },
+		{ id: 'atk', header: '攻', width: 45, sort: true },
+		{ id: 'def', header: '守', width: 45, sort: true }
+	];
+
+	/** タブレット向けカラム定義。 */
+	const tabletColumns: IColumnConfig[] = [
+		{
+			id: 'name_ja',
+			header: [{ text: 'カード名' }, { filter: 'text' as const }],
+			width: 220,
+			flexgrow: 1
+		},
+		{
+			id: 'frame_type',
+			header: ['カード種', { filter: 'richselect' as const }],
+			width: 120,
+			sort: true,
+			cell: FrameTypeBadge
+		},
+		{
+			id: 'race',
+			header: ['種族', { filter: 'richselect' as const }],
+			width: 150,
+			sort: true,
+			cell: RaceBadge
+		},
+		{ id: 'level', header: 'Lv', width: 90, sort: true, cell: LevelBadge },
+		{ id: 'atk', header: '攻', width: 65, sort: true },
+		{ id: 'def', header: '守', width: 65, sort: true }
+	];
+
+	const responsive = {
+		640: { columns: mobileColumns, sizes: { rowHeight: 48 } },
+		1280: { columns: tabletColumns, sizes: { rowHeight: 44 } }
+	};
 
 	onMount(async () => {
 		const res = await fetch('/api/cards');
@@ -110,7 +149,10 @@
 					<Grid
 						data={cards}
 						{columns}
-						init={(a) => { api = a; }}
+						{responsive}
+						init={(a) => {
+							api = a;
+						}}
 						split={{ left: 1 }}
 						sizes={{ rowHeight: 40 }}
 					/>
@@ -125,6 +167,7 @@
 		margin: 0;
 		padding: 0;
 		height: 100%;
+		overflow: hidden;
 		font-family: system-ui, sans-serif;
 		background: #0f172a;
 		color: #e2e8f0;
@@ -188,7 +231,7 @@
 		z-index: 100;
 		pointer-events: none;
 		width: max-content;
-		max-width: 320px;
+		max-width: 280px;
 	}
 
 	.hint-popup p {
@@ -225,5 +268,21 @@
 	main :global(.wx-grid) {
 		flex: 1;
 		min-height: 0;
+	}
+
+	@media (max-width: 640px) {
+		header {
+			padding: 0.5rem 0.75rem;
+			gap: 0.5rem;
+		}
+
+		h1 {
+			font-size: 0.95rem;
+		}
+
+		/* モバイルでのヒントポップアップはタップ操作のため非表示 */
+		.hint {
+			display: none;
+		}
 	}
 </style>
